@@ -15,9 +15,13 @@ const routes = [
   },
 ]
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-})
+// 创建路由实例的函数，支持动态 base
+export function createAppRouter(base = '/') {
+  return createRouter({
+    history: createWebHistory(base),
+    routes,
+  })
+}
 
-export default router
+// 默认导出，用于独立运行
+export default createAppRouter()

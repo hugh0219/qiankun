@@ -5,19 +5,22 @@ import router from './router';
 
 import { registerMicroApps, start, type LoadableApp } from 'qiankun';
 
+// 为每个子应用传递 activeRule
+const getMicroAppConfig = (name: string, entry: string, activeRule: string) => {
+  return {
+    name,
+    entry,
+    container: '#subapp',
+    activeRule,
+    props: {
+      activeRule, // 传递 activeRule 给子应用
+    },
+  };
+};
+
 const app = [
-  {
-    name: 'react-app', // app name registered
-    entry: '//localhost:9528',
-    container: '#subapp',
-    activeRule: '/react',
-  },
-  {
-    name: 'vue-app',
-    entry: '//localhost:9529',
-    container: '#subapp',
-    activeRule: '/vue',
-  },
+  getMicroAppConfig('react-app', '//localhost:9528', '/react'),
+  getMicroAppConfig('vue-app', '//localhost:9529', '/vue'),
 ];
 
 const loadApp = {
