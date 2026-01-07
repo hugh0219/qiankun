@@ -1,22 +1,29 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import qiankun from 'vite-plugin-qiankun';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    qiankun('react-app', {
+      useDevMode: true,
+    }),
+  ],
   server: {
     port: 9528,
     cors: true,
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
+    // 在 qiankun 环境下禁用 HMR，避免 HMR 脚本执行出错
+    hmr: false,
   },
-  // // 动态设置 publicPath（qiankun 会注入 __INJECTED_PUBLIC_PATH_BY_QIANKUN__ 变量）
-  base: process.env.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ || '/',
   build: {
     rollupOptions: {
       output: {
         format: 'umd',
+        name: 'react-app',
       },
     },
   },

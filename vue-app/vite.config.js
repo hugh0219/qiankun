@@ -16,7 +16,6 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: process.env.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ || '/',
   server: {
     port: 9529,
     cors: true,
