@@ -1,48 +1,58 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-defineProps<{ msg: string }>();
+defineProps<{ msg: string }>()
 
-const count = ref(0);
+const count = ref(0)
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <div class="hello-world">
+    <h1>{{ msg }}</h1>
 
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="../assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
+    <div>
+      <a href="https://vite.dev" target="_blank">
+        <img src="/vite.svg" class="logo" alt="Vite logo" />
+      </a>
+      <a href="https://vuejs.org/" target="_blank">
+        <img src="../assets/vue.svg" class="logo vue" alt="Vue logo" />
+      </a>
+    </div>
+    <div class="card">
+      <button type="button" @click="count++">count is {{ count }}</button>
+      <p>
+        Edit
+        <code>components/HelloWorld.vue</code> to test HMR
+      </p>
+    </div>
+
     <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
+      Check out
+      <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
+        >create-vue</a
+      >, the official Vue + Vite starter
     </p>
+    <p>
+      Learn more about IDE Support for Vue in the
+      <a
+        href="https://vuejs.org/guide/scaling-up/tooling.html#ide-support"
+        target="_blank"
+        >Vue Docs Scaling up Guide</a
+      >.
+    </p>
+    <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
   </div>
-
-  <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
-  </p>
-  <p>
-    Learn more about IDE Support for Vue in the
-    <a
-      href="https://vuejs.org/guide/scaling-up/tooling.html#ide-support"
-      target="_blank"
-      >Vue Docs Scaling up Guide</a
-    >.
-  </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
 </template>
 
 <style scoped>
+.hello-world {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

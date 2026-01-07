@@ -1,5 +1,6 @@
-import { createRouter, createMemoryHistory } from 'vue-router';
-import Home from '@/views/Home.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from '@/views/Home.vue'
+import About from '@/views/About.vue'
 
 const routes = [
   {
@@ -7,12 +8,16 @@ const routes = [
     name: 'Home',
     component: Home,
   },
-];
+  {
+    path: '/about',
+    name: 'About',
+    component: About,
+  },
+]
 
-// qiankun 子应用使用 memory history，避免与主应用路由冲突
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHistory(),
   routes,
-});
+})
 
-export default router;
+export default router

@@ -1,27 +1,53 @@
 <script setup>
-import { RouterView } from 'vue-router';
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
   <div id="vue-app">
     <nav>
       <router-link to="/">首页</router-link>
+      <router-link to="/about">关于</router-link>
     </nav>
-    <RouterView />
+    <div class="content">
+      <RouterView />
+      <div class="footer">
+        <p>footer</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+#vue-app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+nav {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: antiquewhite;
+  gap: 20px;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.content {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer {
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  font-weight: bold;
 }
 </style>
