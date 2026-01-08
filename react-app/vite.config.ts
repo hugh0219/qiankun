@@ -21,6 +21,7 @@ export default defineConfig({
   server: {
     port: 9528,
     cors: true,
+    origin: 'http://localhost:9528',
     headers: {
       'Access-Control-Allow-Origin': '*',
     },

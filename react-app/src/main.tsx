@@ -8,8 +8,6 @@ import {
   type QiankunProps,
 } from 'vite-plugin-qiankun/dist/helper'
 
-import './public-path'
-
 let root: ReturnType<typeof createRoot> | null = null
 
 function render(props: QiankunProps = {}) {
