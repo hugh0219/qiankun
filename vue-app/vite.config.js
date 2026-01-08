@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import path from 'path';
-import qiankun from 'vite-plugin-qiankun';
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import path from 'path'
+import qiankun from 'vite-plugin-qiankun'
+import { qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -16,6 +17,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  base: qiankunWindow.__POWERED_BY_QIANKUN__ ? '/vue-app' : '/',
   server: {
     port: 9529,
     cors: true,
@@ -31,4 +33,4 @@ export default defineConfig({
       },
     },
   },
-});
+})

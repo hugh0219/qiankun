@@ -1,75 +1,75 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 
 // 使用浏览器实际路径
-const currentPath = ref(window.location.pathname);
+const currentPath = ref(window.location.pathname)
 
 // 监听浏览器路径变化
 const updatePath = () => {
-  currentPath.value = window.location.pathname;
-};
+  currentPath.value = window.location.pathname
+}
 
 // 判断是否是子应用路由
 const isMicroApp = computed(() => {
-  const path = currentPath.value;
+  const path = currentPath.value
   return (
-    path === '/vue' ||
-    path === '/react' ||
-    path.startsWith('/vue/') ||
-    path.startsWith('/react/')
-  );
-});
+    path === '/vue-app' ||
+    path === '/react-app' ||
+    path.startsWith('/vue-app/') ||
+    path.startsWith('/react-app/')
+  )
+})
 
 // 菜单项配置
 const menuItems = [
   { path: '/', name: '首页', icon: '🏠' },
-  { path: '/react', name: 'React 子应用', icon: '⚛️' },
-  { path: '/vue', name: 'Vue 子应用', icon: '💚' },
-];
+  { path: '/react-app', name: 'React 子应用', icon: '⚛️' },
+  { path: '/vue-app', name: 'Vue 子应用', icon: '💚' },
+]
 
 // 导航到指定路径
 const navigateTo = (path: string) => {
-  if (path.startsWith('/react') || path.startsWith('/vue')) {
+  if (path.startsWith('/react-app') || path.startsWith('/vue-app')) {
     // 子应用路由，直接修改浏览器 URL
-    window.history.pushState({}, '', path);
-    updatePath();
+    window.history.pushState({}, '', path)
+    updatePath()
   } else {
     // 主应用路由，使用 Vue Router
-    router.push(path);
+    router.push(path)
   }
-};
+}
 
 // 判断菜单项是否激活
 const isActive = (path: string) => {
   if (path === '/') {
-    return currentPath.value === '/';
+    return currentPath.value === '/'
   }
-  return currentPath.value === path || currentPath.value.startsWith(path + '/');
-};
+  return currentPath.value === path || currentPath.value.startsWith(path + '/')
+}
 
 onMounted(() => {
-  window.addEventListener('popstate', updatePath);
+  window.addEventListener('popstate', updatePath)
 
-  const originalPushState = history.pushState;
-  const originalReplaceState = history.replaceState;
+  const originalPushState = history.pushState
+  const originalReplaceState = history.replaceState
 
   history.pushState = function (...args) {
-    originalPushState.apply(history, args);
-    updatePath();
-  };
+    originalPushState.apply(history, args)
+    updatePath()
+  }
 
   history.replaceState = function (...args) {
-    originalReplaceState.apply(history, args);
-    updatePath();
-  };
-});
+    originalReplaceState.apply(history, args)
+    updatePath()
+  }
+})
 
 onUnmounted(() => {
-  window.removeEventListener('popstate', updatePath);
-});
+  window.removeEventListener('popstate', updatePath)
+})
 </script>
 
 <template>
@@ -87,8 +87,7 @@ onUnmounted(() => {
             v-for="item in menuItems"
             :key="item.path"
             :class="['menu-item', { active: isActive(item.path) }]"
-            @click="navigateTo(item.path)"
-          >
+            @click="navigateTo(item.path)">
             <span class="menu-icon">{{ item.icon }}</span>
             <span class="menu-text">{{ item.name }}</span>
           </div>
@@ -102,7 +101,7 @@ onUnmounted(() => {
           <RouterView />
         </div>
         <!-- 子应用容器 -->
-        <div v-show="isMicroApp" id="subapp" class="subapp-container"></div>
+        <div v-show="isMicroApp" id="container" class="container"></div>
       </main>
     </div>
   </div>
@@ -199,7 +198,7 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-.subapp-container {
+.container {
   width: 100%;
   height: 100%;
   position: absolute;

@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import Layout from './components/Layout.vue';
+import Layout from './components/Layout.vue'
+import { registerQiankunApps } from '@/qiankun'
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  // 加载乾坤
+  registerQiankunApps()
+})
 </script>
 
 <template>

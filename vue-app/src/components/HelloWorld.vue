@@ -1,4 +1,6 @@
 <script setup>
+import vueLogo from '@/assets/vue.svg'
+import reactLogo from '@/assets/react.svg'
 import { ref } from 'vue'
 
 defineProps({
@@ -10,7 +12,8 @@ const count = ref(0)
 
 <template>
   <h1>{{ msg }}</h1>
-
+  <img :src="vueLogo" alt="Vue logo" />
+  <img :src="reactLogo" alt="React logo" />
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
   </div>
