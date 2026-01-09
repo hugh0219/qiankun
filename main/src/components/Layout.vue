@@ -25,7 +25,7 @@ const isMicroApp = computed(() => {
 
 // 菜单项配置
 const menuItems = [
-  { path: '/', name: '首页', icon: '🏠' },
+  { path: '/home', name: '首页', icon: '🏠' },
   { path: '/react-app', name: 'React 子应用', icon: '⚛️' },
   { path: '/vue-app', name: 'Vue 子应用', icon: '💚' },
 ]
@@ -37,17 +37,29 @@ const navigateTo = (path: string) => {
     window.history.pushState({}, '', path)
     updatePath()
   } else {
-    // 主应用路由，使用 Vue Router
-    router.push(path)
+    // 主应用路由：先修改浏览器 URL 让 qiankun 检测到路径变化并卸载子应用
+    // 这对于 React 应用特别重要，因为 React Router 的路由监听器需要被正确清理
+    const currentIsMicroApp = isMicroApp.value
+    if (currentIsMicroApp) {
+      // 如果当前在子应用中，先改变路径让 qiankun 卸载子应用
+      window.history.pushState({}, '', path)
+      updatePath()
+      // 等待下一个事件循环，确保 qiankun 完成卸载后再同步 Vue Router
+      setTimeout(() => {
+        router.push(path).catch(() => {
+          // 忽略路由错误，因为路径已经更新
+        })
+      }, 0)
+    } else {
+      // 如果不在子应用中，直接使用 Vue Router
+      router.push(path)
+    }
   }
 }
 
 // 判断菜单项是否激活
 const isActive = (path: string) => {
-  if (path === '/') {
-    return currentPath.value === '/'
-  }
-  return currentPath.value === path || currentPath.value.startsWith(path + '/')
+  return currentPath.value === path || currentPath.value.startsWith(path)
 }
 
 onMounted(() => {
@@ -186,9 +198,10 @@ onUnmounted(() => {
 
 .main-content {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
   background: #fff;
   position: relative;
+  min-height: 0;
 }
 
 .main-app-content {
@@ -196,6 +209,7 @@ onUnmounted(() => {
   height: 100%;
   padding: 24px;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .container {
@@ -204,5 +218,24 @@ onUnmounted(() => {
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+}
+
+/* 确保 qiankun 创建的包装器铺满容器 */
+:deep(.container > div[id*='__qiankun_microapp_wrapper']) {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+</style>
+
+<!-- 非 scoped 样式，确保能应用到 qiankun 动态创建的元素 -->
+<style>
+#container > div[id*='__qiankun_microapp_wrapper'] {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 </style>
