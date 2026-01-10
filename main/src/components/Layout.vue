@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { globalMessage, actions } from '@/qiankun'
 
 const router = useRouter()
+const inputMessage = ref('')
 
 // 使用浏览器实际路径
 const currentPath = ref(window.location.pathname)
@@ -62,6 +64,17 @@ const isActive = (path: string) => {
   return currentPath.value === path || currentPath.value.startsWith(path)
 }
 
+// 发送消息给子应用
+const sendMessage = () => {
+  if (!inputMessage.value.trim()) return
+  if (actions?.setGlobalState) {
+    actions.setGlobalState({
+      message: inputMessage.value,
+    })
+  }
+  inputMessage.value = ''
+}
+
 onMounted(() => {
   window.addEventListener('popstate', updatePath)
 
@@ -77,6 +90,9 @@ onMounted(() => {
     originalReplaceState.apply(history, args)
     updatePath()
   }
+
+  // 直接使用 qiankun.ts 中导出的响应式状态
+  // 状态更新已经在 qiankun.ts 的监听器中处理
 })
 
 onUnmounted(() => {
@@ -89,6 +105,19 @@ onUnmounted(() => {
     <!-- 顶部标题栏 -->
     <header class="header">
       <h1 class="title">微前端主应用</h1>
+      <div class="header-right">
+        <div v-if="globalMessage" class="header-message">
+          🔔 {{ globalMessage }}
+        </div>
+        <div class="header-send">
+          <input
+            v-model="inputMessage"
+            placeholder="向子应用发送消息..."
+            class="header-input"
+            @keyup.enter="sendMessage" />
+          <button @click="sendMessage" class="header-send-btn">发送</button>
+        </div>
+      </div>
     </header>
 
     <div class="content-wrapper">
@@ -134,9 +163,83 @@ onUnmounted(() => {
   color: white;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 100;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-message {
+  font-size: 14px;
+  opacity: 0.9;
+  animation: fadeIn 0.3s;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.header-send {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-input {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 14px;
+  width: 200px;
+  outline: none;
+}
+
+.header-input:focus {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: white;
+}
+
+.header-input::placeholder {
+  color: #999;
+}
+
+.header-send-btn {
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #667eea;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.header-send-btn:hover {
+  background: white;
+  transform: translateY(-1px);
+}
+
+.header-send-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
 }
 
 .title {

@@ -11,7 +11,7 @@ import {
 let root: ReturnType<typeof createRoot> | null = null
 
 function render(props: QiankunProps = {}) {
-  const { container, activeRule } = props
+  const { container } = props
 
   // 在 qiankun 容器中创建或查找 root 元素
   let rootElement: HTMLElement
@@ -31,7 +31,7 @@ function render(props: QiankunProps = {}) {
   root = createRoot(rootElement)
   root.render(
     <StrictMode>
-      <App activeRule={activeRule} />
+      <App {...props} />
     </StrictMode>
   )
 }

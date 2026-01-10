@@ -11,10 +11,13 @@ let app = null
 let router = null
 
 function render(props = {}) {
-  const { container, activeRule } = props
+  console.log('子应用props==', props)
+  const { container, activeRule, onGlobalStateChange, setGlobalState } = props
   // 动态创建路由，base 设置为 activeRule
   router = createAppRouter(activeRule || '/')
   app = createApp(App)
+  // 通过 provide 传递 actions
+  app.provide('qiankunActions', { onGlobalStateChange, setGlobalState })
   app.use(router)
   app.mount(container ? container.querySelector('#app') : '#app')
 }

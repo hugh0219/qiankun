@@ -7,6 +7,7 @@
       <p class="description">
         这是一个基于 qiankun 的微前端架构示例，支持多个子应用的集成和管理。
       </p>
+
       <div class="features">
         <div class="feature-item">
           <div class="feature-icon">🚀</div>
