@@ -51,6 +51,7 @@ const sendMessage = () => {
 }
 
 onMounted(() => {
+  console.log('actions', actions)
   if (!actions) {
     return
   }

@@ -10,16 +10,21 @@ import {
 let app = null
 let router = null
 
-function render(props = {}) {
+function render(props) {
   console.log('子应用props==', props)
-  const { container, activeRule, onGlobalStateChange, setGlobalState } = props
-  // 动态创建路由，base 设置为 activeRule
-  router = createAppRouter(activeRule || '/')
   app = createApp(App)
-  // 通过 provide 传递 actions
-  app.provide('qiankunActions', { onGlobalStateChange, setGlobalState })
-  app.use(router)
-  app.mount(container ? container.querySelector('#app') : '#app')
+  if (props) {
+    const { container, activeRule, onGlobalStateChange, setGlobalState } = props
+    // 通过 provide 传递 actions
+    app.provide('qiankunActions', { onGlobalStateChange, setGlobalState })
+    router = createAppRouter(activeRule || '/')
+    app.use(router)
+    app.mount(container ? container.querySelector('#app') : '#app')
+  } else {
+    router = createAppRouter('/')
+    app.use(router)
+    app.mount('#app')
+  }
 }
 
 // 使用 vite-plugin-qiankun 的 renderWithQiankun 函数
